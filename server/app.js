@@ -1,20 +1,9 @@
 const express = require("express");
-const path = require("path");
-let cookie_parser = require("cookie-parser");
 const app = express();
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
+const decodeTokens = require("./usersTokens");
 
 const DATA = [{ id: 1, title: "title", description: "Lolka123" }];
-
-// app.options("/api/recepts",  (require, resolve) => {
-//   resolve.set({
-//     "Access-Control-Allow-Origin": "*",
-//     "Access-Control-Allow-Methods": "*",
-//     "Access-Control-Allow-Headers": "*",
-//   });
-//   return resolve.end();
-// });
 
 app.use(
   cors({
@@ -22,13 +11,35 @@ app.use(
   })
 );
 
-app.get("/api/recepts", (require, resolve) => {
-  return resolve.status(200).json(DATA);
+app.use(express.json());
+
+app.listen(5000, () => console.log("Server up"));
+
+app.get("/api/recepts", (req, res) => {
+  return res.status(200).json(DATA);
 });
 
-app.get("/auth", (req, res) => {
-  //logic auth
-  return res.json({ token });
+app.post("/auth", (req, res) => {
+  const { userName, password } = req.body;
+  if (!userName) {
+    return res.status(401).send({ error: "Введите имя пользователя" });
+  }
+  if (!password) {
+    return res.status(401).send({ error: "Введите пароль" });
+  }
+  if (!!password && !!userName) {
+    const user = decodeTokens.find(({ userName: name }) => name === userName);
+    const pass = user?.password === password;
+    if (!!user?.userName && !!pass) {
+      return res.json({ token: user.token });
+    } else {
+      return res
+        .status(401)
+        .send({
+          error: "Имя пользователя или парль не верные, проверьте данные",
+        });
+    }
+  }
 });
 
 // app.get("*", (require, resolve) => {
@@ -39,5 +50,3 @@ app.get("/auth", (req, res) => {
 //     console.log(resolve, 'resolve')
 //     resolve.sendFile(path.resolve(__dirname, '../', 'pub.html'))
 // })
-
-app.listen(5000, () => console.log("Server up"));
