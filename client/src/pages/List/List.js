@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchListRecipes,
@@ -6,14 +6,14 @@ import {
   selectRecipes,
   selectToken,
   selectUserInfo,
-  updateRecipeLiked,
   sortedCompositions,
   putQuery,
 } from "model";
-import { HeartOutlined, HeartTwoTone, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { Table, Input } from "antd";
 import { debounce } from "lodash";
 import "./index.css";
+import { Likes, Level, Name, CompositionBase } from "./ui";
 
 export const List = () => {
   const dispatch = useDispatch();
@@ -26,112 +26,12 @@ export const List = () => {
   const loading = useSelector(selectLoadingRecipes);
   const isLoading = loading === "loading";
 
-  const Name = ({ name, image }) => {
-    return (
-      <div>
-        <div
-          style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px" }}
-        >
-          {name}
-        </div>
-        <img style={{ width: "50%" }} src={image} />
-      </div>
-    );
-  };
-
-  const CompositionBase = ({ data }) => {
-    return (
-      <div style={{ display: "flex", justifyContent: "flex-start" }}>
-        <ul class="compositionBase">
-          {data.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
-  const Likes = useMemo(() => {
-    return ({ value, id, recipeId }) => {
-      const userId = Number(user?.id);
-      const userIdLiked = !!id.length
-        ? id.find((item) => Number(item) === userId)
-        : null;
-      return (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {!!userIdLiked ? (
-            <HeartTwoTone
-              onClick={() => {
-                dispatch(
-                  updateRecipeLiked({
-                    userId,
-                    recipeId,
-                    status: "dislike",
-                  })
-                );
-              }}
-              style={{ fontSize: "30px" }}
-              twoToneColor={["#ff3e3e", "#c80000"]}
-            />
-          ) : (
-            <HeartOutlined
-              style={{ fontSize: "30px" }}
-              onClick={() => {
-                dispatch(
-                  updateRecipeLiked({
-                    userId,
-                    recipeId,
-                    status: "like",
-                  })
-                );
-              }}
-            />
-          )}
-          <div
-            style={{
-              margin: "0 5px",
-              color: !!userIdLiked ? "#c80000" : "black",
-            }}
-          >
-            {value}
-          </div>
-        </div>
-      );
-    };
-  }, [user]);
-
-  const level = {
-    hard: "Крутой повар",
-    medium: "Средняя",
-    easy: "Просто",
-  };
-
-  const Level = ({ value }) => {
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {level[value]}
-      </div>
-    );
-  };
-
   const columns = [
     {
       title: <div style={{ fontSize: "20px" }}>Блюдо</div>,
       dataIndex: "name",
       key: "name",
-      render: (name, { image }) => <Name name={name} image={image} />,
+      render: (name, { image, id }) => <Name name={name} image={image} id={id}/>,
       sorter: (a, b) => a.name.localeCompare(b.name),
       responsive: ["md", "sm", "xs"],
       width: "40%",
@@ -172,13 +72,18 @@ export const List = () => {
             key: "likes",
             render: (value, { userIdLiked, id }) =>
               user?.id ? (
-                <Likes value={value} recipeId={id} id={userIdLiked} />
+                <Likes
+                  value={value}
+                  recipeId={id}
+                  id={userIdLiked}
+                  user={user}
+                />
               ) : null,
             responsive: ["md", "sm", "xs"],
           },
         ]
       : [];
-  }, [token]);
+  }, [token, user]);
 
   const onChange = (pagination, filters, sorter) => {
     if (sorter.field === "compositionBase") {
@@ -219,7 +124,7 @@ export const List = () => {
       dispatch(putQuery());
       dispatch(fetchListRecipes());
     }
-  }, 100);
+  }, 400);
 
   return (
     <div

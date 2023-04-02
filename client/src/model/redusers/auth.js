@@ -11,9 +11,10 @@ export const fetchToken = createAsyncThunk(
     try {
       const response = await request(
         "http://localhost:5000/auth",
+        data,
         "post",
-        data
       );
+      console.log(response, 'response')
       if (response.status !== 200) {
         throw new Error(response.response.data.error);
       }

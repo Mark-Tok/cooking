@@ -16,7 +16,11 @@ export {
   putListRecipe,
   updateRecipeLiked,
   sortedCompositions,
-  putQuery
+  putQuery,
 } from "./redusers/recipes";
+
+export {setDataError}  from './redusers/error'
+
+export { selectLoadingRecipe, fetcRecipe } from "./redusers/recipe";
 
 export { store } from "./redusers/store";

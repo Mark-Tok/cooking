@@ -4,13 +4,12 @@ import { request } from "shared/api";
 //Fetch Data
 export const fetchListRecipes = createAsyncThunk(
   "api/fetchListRecipes",
-  async function (data, { rejectWithValue, getState }) {
+  async function (data, { rejectWithValue, getState, dispatch }) {
     const { recipes } = getState();
     try {
       if (!!data || !!recipes.query) {
         const response = await request(
-          `http://localhost:5000/list/?search=${data || recipes.query}`,
-          "get"
+          `http://localhost:5000/list/?search=${data || recipes.query}`
         );
         if (response.status !== 200) {
           throw new Error(response.response.data.error);
@@ -32,11 +31,7 @@ export const fetchListRecipes = createAsyncThunk(
           return response.data;
         }
       } else {
-        const response = await request(
-          "http://localhost:5000/list",
-          "get",
-          data
-        );
+        const response = await request("http://localhost:5000/list", data);
         if (response.status !== 200) {
           throw new Error(response.response.data.error);
         }
@@ -67,7 +62,14 @@ export const updateRecipeLiked = createAsyncThunk(
   async function (data, { rejectWithValue, dispatch, getState }) {
     const { recipes, sorted } = await getState();
     try {
-      await request("http://localhost:5000/udateRecipeLiked", "put", data);
+      const response = await request(
+        "http://localhost:5000/udateRecipeLiked",
+        data,
+        "put"
+      );
+      if (response.status !== 201) {
+        throw new Error(response);
+      }
       if (!recipes.query) {
         await dispatch(fetchListRecipes());
       } else {
@@ -84,7 +86,7 @@ export const putListRecipe = createAsyncThunk(
   "api/putListRecipes",
   async function (data, { rejectWithValue }) {
     try {
-      const response = await request("http://localhost:5000/list", "put", data);
+      const response = await request("http://localhost:5000/list", data, "put");
       if (response.status !== 200) {
         throw new Error(response.response.data.error);
       }

@@ -1,6 +1,8 @@
 import axios from "axios";
+import { setDataError } from "model";
+import { useDispatch } from "react-redux";
 
-export async function request(url, method = "GET", data = null) {
+export async function request(url, data = null, method = "GET") {
   const token = window.localStorage.getItem("token");
   try {
     const headers = {
@@ -12,11 +14,11 @@ export async function request(url, method = "GET", data = null) {
       url,
       data,
     });
-    if (response.status !== 200) {
-      throw new Error(response.response.data.error);
-    }
+    // if (response.status !== 200) {
+    //   throw new Error(response?.response?.data);
+    // }
     return response;
   } catch (e) {
-   return e;
+    return e;
   }
 }
