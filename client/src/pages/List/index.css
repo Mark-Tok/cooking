@@ -1,0 +1,4 @@
+ul.compositionBase {
+  list-style-image: url('../../assets/check.svg');
+  list-style-position: inside;
+}
