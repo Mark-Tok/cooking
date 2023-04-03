@@ -2,9 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const decodeTokens = require("./tokens");
-const recipes = require("./recipes");
 const list = require("./list");
-
+const recipes = require("./recipes");
 app.use("/images", express.static("images"));
 
 app.use(
@@ -32,6 +31,12 @@ app.get("/list", (req, res) => {
       item.compositionBase.join("").toLowerCase().includes(search.toLowerCase())
   );
   return res.status(200).json(filtredArray);
+});
+
+app.get("/list/:id", (req, res) => {
+  const { id } = req.params;
+  const recipe = recipes.filter((item) => item.id === Number(id));
+  return res.status(200).json(recipe);
 });
 
 app.put("/udateRecipeLiked", (req, res) => {
@@ -76,12 +81,3 @@ app.post("/auth", (req, res) => {
     }
   }
 });
-
-// app.get("*", (require, resolve) => {
-//   resolve.status(200)
-// });
-
-// app.get("*", (require,resolve) => {
-//     console.log(resolve, 'resolve')
-//     resolve.sendFile(path.resolve(__dirname, '../', 'pub.html'))
-// })

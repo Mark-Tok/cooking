@@ -10,7 +10,9 @@ export const fetcRecipe = createAsyncThunk(
       if (response.status !== 200) {
         throw new Error(response.response.data.error);
       }
-      return response.data;
+      if (response.status === 200 && response?.data) {
+        return response.data;
+      }
     } catch (e) {
       return rejectWithValue(e.message);
     }
@@ -24,13 +26,17 @@ export const recipeSlice = createSlice({
     status: null,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    removeRecipe: (state) => {
+      state.data = null;
+    },
+  },
   extraReducers: {
     [fetcRecipe.pending]: (state, action) => {
       state.status = "loading";
     },
     [fetcRecipe.fulfilled]: (state, actions) => {
-      state.data = actions.payload;
+      state.data = actions.payload[0];
       state.status = null;
     },
     [fetcRecipe.rejected]: (state, action) => {
@@ -40,8 +46,8 @@ export const recipeSlice = createSlice({
   },
 });
 
-// export const { saveToken, deleteToken, sortedCompositions, putQuery } =
-//   recipesSlice.actions;
+export const { removeRecipe } = recipeSlice.actions;
 
 //Selectors
 export const selectLoadingRecipe = (state) => state.recipe.status;
+export const selectRecipe = (state) => state.recipe.data;

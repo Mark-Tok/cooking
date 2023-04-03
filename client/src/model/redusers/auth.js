@@ -61,12 +61,6 @@ export const tokenSlice = createSlice({
   },
 });
 
-export const store = configureStore({
-  reducer: {
-    token: tokenSlice.reducer,
-  },
-});
-
 export const { saveToken, deleteToken } = tokenSlice.actions;
 
 //Selectors

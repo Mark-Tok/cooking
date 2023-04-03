@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { request } from "shared/api";
-
+import { fetcRecipe } from "./recipe";
 //Fetch Data
 export const fetchListRecipes = createAsyncThunk(
   "api/fetchListRecipes",
   async function (data, { rejectWithValue, getState, dispatch }) {
-    const { recipes } = getState();
+    const { recipes, recipe } = getState();
     try {
       if (!!data || !!recipes.query) {
         const response = await request(
@@ -60,7 +60,7 @@ export const fetchListRecipes = createAsyncThunk(
 export const updateRecipeLiked = createAsyncThunk(
   "api/updateRecipeLiked",
   async function (data, { rejectWithValue, dispatch, getState }) {
-    const { recipes, sorted } = await getState();
+    const { recipes } = await getState();
     try {
       const response = await request(
         "http://localhost:5000/udateRecipeLiked",
@@ -76,7 +76,6 @@ export const updateRecipeLiked = createAsyncThunk(
         await dispatch(fetchListRecipes(recipes.query));
       }
     } catch (e) {
-      //ты перенес ошибку на и здесь она не будет записываться в стор
       return rejectWithValue(e.message);
     }
   }

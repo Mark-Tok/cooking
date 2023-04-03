@@ -19,8 +19,26 @@ export {
   putQuery,
 } from "./redusers/recipes";
 
-export {setDataError}  from './redusers/error'
+export { setDataError } from "./redusers/error";
 
-export { selectLoadingRecipe, fetcRecipe } from "./redusers/recipe";
+export {
+  selectLoadingRecipe,
+  fetcRecipe,
+  selectRecipe,
+  removeRecipe,
+} from "./redusers/recipe";
+
+export {
+  selectUploadImage,
+  createImage,
+  selectBase,
+  selectComposition,
+  createComposition,
+  createBase,
+  createName,
+  createDescription,
+  selectNameRecipe,
+  selectDescriptionRecipe,
+} from "./redusers/createRecipe";
 
 export { store } from "./redusers/store";

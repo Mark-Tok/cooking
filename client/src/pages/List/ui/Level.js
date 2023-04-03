@@ -1,4 +1,4 @@
-const level = {
+export  const level = {
   hard: "Крутой повар",
   medium: "Средняя",
   easy: "Просто",

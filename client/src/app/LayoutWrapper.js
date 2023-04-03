@@ -9,7 +9,7 @@ import {
 } from "model";
 import logo from "../assets/logo.png";
 import { useEffect } from "react";
-const { Header, Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
 const headerStyle = {
   textAlign: "center",
@@ -39,8 +39,8 @@ export const LayoutWrapper = ({ children }) => {
     dispatch(fetchListRecipes());
   }, [dispatch]);
   return (
-    <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
-      <Layout style={{ backgroundColor: "#b9e0bd", padding: "0 50px" }}>
+    <Space direction="vertical" style={{ width: "100%", backgroundColor: "#b9e0bd", height:'100vh' }} size={[0, 48]}>
+      <Layout style={{ backgroundColor: "#b9e0bd", padding: "0 150px" }}>
         <Header style={headerStyle}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <img style={{ width: "20%" }} alt="logo" src={logo} />
@@ -53,6 +53,8 @@ export const LayoutWrapper = ({ children }) => {
             )}
           </div>
         </Header>
+      </Layout>
+      <Layout style={{ backgroundColor: "#b9e0bd", padding: "0 150px" }}>
         <Content>{children}</Content>
       </Layout>
     </Space>

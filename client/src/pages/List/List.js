@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   fetchListRecipes,
   selectLoadingRecipes,
@@ -10,7 +11,7 @@ import {
   putQuery,
 } from "model";
 import { SearchOutlined } from "@ant-design/icons";
-import { Table, Input } from "antd";
+import { Table, Input, Button } from "antd";
 import { debounce } from "lodash";
 import "./index.css";
 import { Likes, Level, Name, CompositionBase } from "./ui";
@@ -19,6 +20,7 @@ export const List = () => {
   const dispatch = useDispatch();
   const token = useSelector(selectToken);
   const user = useSelector(selectUserInfo);
+  const navigation = useNavigate();
   useEffect(() => {
     dispatch(fetchListRecipes());
   }, [token]);
@@ -31,7 +33,9 @@ export const List = () => {
       title: <div style={{ fontSize: "20px" }}>Блюдо</div>,
       dataIndex: "name",
       key: "name",
-      render: (name, { image, id }) => <Name name={name} image={image} id={id}/>,
+      render: (name, { image, id }) => (
+        <Name name={name} image={image} id={id} />
+      ),
       sorter: (a, b) => a.name.localeCompare(b.name),
       responsive: ["md", "sm", "xs"],
       width: "40%",
@@ -77,6 +81,7 @@ export const List = () => {
                   recipeId={id}
                   id={userIdLiked}
                   user={user}
+                  list
                 />
               ) : null,
             responsive: ["md", "sm", "xs"],
@@ -134,7 +139,10 @@ export const List = () => {
         flexDirection: "column",
       }}
     >
-      <div style={{ marginBottom: "20px", width: "100%" }}>
+      <Button onClick={() => navigation("/create")} type="primary">
+        Создать рецепт
+      </Button>
+      <div style={{ margin: "20px 0px", width: "100%" }}>
         <Input
           prefix={<SearchOutlined twoToneColor={"#b6b3b3"} />}
           placeholder="Поиск по блюдам или основным ингридиентам"

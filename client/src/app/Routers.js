@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { LayoutWrapper } from "./LayoutWrapper";
 import { LoginForm } from "components/LoginForm";
 import { AuthWrapper } from "./AuthWrapper";
-import { List, Recipe } from "pages";
+import { List, Recipe, Create } from "pages";
 import { selectIsAuth } from "../model/redusers/auth";
 export const Routres = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -13,6 +13,7 @@ export const Routres = () => {
       <LayoutWrapper>
         <Routes>
           <Route path="login" element={!!isAuth ? <List /> : <LoginForm />} />
+          <Route path="create" element={<Create />} />
           <Route path="list" element={<List />} />
           <Route path="list">
             <Route path=":id" element={<Recipe />} />

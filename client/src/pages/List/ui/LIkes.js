@@ -22,8 +22,7 @@ export const Likes = ({ value, id, recipeId, user }) => {
               updateRecipeLiked({
                 userId,
                 recipeId,
-                status: "dislike",
-              })
+                status: "dislike"              })
             );
           }}
           style={{ fontSize: "30px" }}
