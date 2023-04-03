@@ -1,41 +1,71 @@
-import {
-  configureStore,
-  createSlice,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { request } from "shared/api";
-// import jwt_decode from "jwt-decode";
-// export const fetchToken = createAsyncThunk(
-//   "auth/fetchAuth",
-//   async function (data, { rejectWithValue }) {
-//     try {
-//       const response = await request(
-//         "http://localhost:5000/auth",
-//         data,
-//         "post",
-//       );
-//       console.log(response, 'response')
-//       if (response.status !== 200) {
-//         throw new Error(response.response.data.error);
-//       }
-//       window.localStorage.setItem("token", JSON.stringify(response.data.token));
-//       return response.data.token;
-//     } catch (e) {
-//       return rejectWithValue(e.message);
-//     }
-//   }
-// );
+import { fetchListRecipes } from "./recipes";
+//Fetch Data
+export const fetchPostRecipe = createAsyncThunk(
+  "api/fetchPostRecipe",
+  async function (data, { rejectWithValue, dispatch }) {
+    try {
+      const response = await request(
+        `http://localhost:5000/fetchPostRecipe`,
+        data,
+        "post"
+      );
+      if (response.status === 200 && !!response?.data) {
+        await dispatch(fetchListRecipes());
+      }
+      if (response.status !== 200) {
+        throw new Error(response.response.data.error);
+      }
+      if (response.status === 200 && response?.data) {
+        return response.data;
+      }
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
 
+export const fetchPutRecipe = createAsyncThunk(
+  "api/fetchPutRecipe",
+  async function (data, { rejectWithValue, dispatch }) {
+    try {
+      const response = await request(
+        `http://localhost:5000/fetchPutRecipe`,
+        data,
+        "put"
+      );
+      if (response.status === 200 && !!response?.data) {
+        await dispatch(fetchListRecipes());
+      }
+      if (response.status !== 200) {
+        throw new Error(response.response.data.error);
+      }
+      if (response.status === 200 && response?.data) {
+        return response.data;
+      }
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+
+
+const initialState = {
+  base: [{ value: "", id: 1 }],
+  composition: [{ value: "", id: 1 }],
+  image: null,
+  steps: [{ value: "" }],
+  name: "",
+  description: "",
+  status: false,
+  success: false,
+  id: null,
+};
 export const createRecipeSlice = createSlice({
   name: "create",
-  initialState: {
-    base: [{ value: "", id: 1 }],
-    composition: [{ value: "", id: 1 }],
-    image: null,
-    steps: {},
-    name: "",
-    description: "",
-  },
+  initialState,
   reducers: {
     createImage: (state, action) => {
       state.image = action.payload;
@@ -52,23 +82,49 @@ export const createRecipeSlice = createSlice({
     createDescription: (state, action) => {
       state.description = action.payload;
     },
+    setId: (state, action) => {
+      state.id = action.payload;
+    },
+    resetState: (state) => {
+      state.image = null;
+      state.base = [{ value: "", id: 1 }];
+      state.composition = [{ value: "", id: 1 }];
+      state.image = null;
+      state.steps = [{ value: "" }];
+      state.name = "";
+      state.description = "";
+      state.status = false;
+      state.success = false;
+    },
+    createSteps: (state, action) => {
+      state.steps = action.payload;
+    },
   },
   extraReducers: {
-    // [fetchToken.pending]: (state) => {
-    //   state.status = "loading";
-    // },
-    // [fetchToken.fulfilled]: (state, action) => {
-    //   const token = action.payload;
-    //   state.status = "finish";
-    //   state.info = JSON.parse(window.atob(token.split(".")[1]));
-    //   // state.info = jwt_decode(actions.payload);
-    //   state.value = token;
-    // },
-    // [fetchToken.rejected]: (state, action) => {
-    //   state.status = null;
-    //   state.value = null;
-    //   state.error = action.payload;
-    // },
+    [fetchPostRecipe.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [fetchPostRecipe.fulfilled]: (state, actions) => {
+      state.data = actions.payload[0];
+      state.status = null;
+      state.success = true;
+    },
+    [fetchPostRecipe.rejected]: (state, action) => {
+      state.status = null;
+      state.error = action.payload;
+    },
+    [fetchPutRecipe.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchPutRecipe.fulfilled]: (state, actions) => {
+      state.data = actions.payload[0];
+      state.status = null;
+      state.success = true;
+    },
+    [fetchPutRecipe.rejected]: (state, action) => {
+      state.status = null;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -78,6 +134,9 @@ export const {
   createBase,
   createName,
   createDescription,
+  createSteps,
+  resetState,
+  setId,
 } = createRecipeSlice.actions;
 
 //Selectors
@@ -86,8 +145,7 @@ export const selectBase = (state) => state.create.base;
 export const selectComposition = (state) => state.create.composition;
 export const selectNameRecipe = (state) => state.create.name;
 export const selectDescriptionRecipe = (state) => state.create.description;
-
-//   export const selectLoading = (state) => state.token.status;
-//   export const selectError = (state) => state.token.error;
-//   export const selectIsAuth = (state) => !!state.token.value;
-//   export const selectUserInfo = (state) => state.token.info;
+export const selectSteps = (state) => state.create.steps;
+export const selectStatusPostRecipe = (state) => state.create.status;
+export const selectStatusPostRecipeSuccess = (state) => state.create.success;
+export const selectId = (state) => state.create.id;

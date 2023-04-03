@@ -119,7 +119,7 @@ export const recipesSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchListRecipes.pending]: (state, action) => {
+    [fetchListRecipes.pending]: (state) => {
       state.status = "loading";
     },
     [fetchListRecipes.fulfilled]: (state, actions) => {

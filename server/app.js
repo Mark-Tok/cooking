@@ -6,6 +6,9 @@ const list = require("./list");
 const recipes = require("./recipes");
 app.use("/images", express.static("images"));
 
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
+
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -35,8 +38,12 @@ app.get("/list", (req, res) => {
 
 app.get("/list/:id", (req, res) => {
   const { id } = req.params;
-  const recipe = recipes.filter((item) => item.id === Number(id));
-  return res.status(200).json(recipe);
+  const recipe = recipes.filter((item) => String(item.id) === String(id));
+
+  //задержка для имитации
+  setTimeout(() => {
+    return res.status(200).json(recipe);
+  }, 1000);
 });
 
 app.put("/udateRecipeLiked", (req, res) => {
@@ -58,6 +65,26 @@ app.put("/udateRecipeLiked", (req, res) => {
   }
 });
 
+app.use("/fetchPutRecipe", (req, res) => {
+  const data = req.body;
+  let indexRecipe;
+  recipes.forEach((item, index) => {
+    if (item.id === data.id) {
+      indexRecipe = index;
+    }
+  });
+  recipes.splice(indexRecipe, 1, data);
+  list.forEach((item, index) => {
+    if (item.id === data.id) {
+      indexRecipe = index;
+    }
+  });
+  list.splice(indexRecipe, 1, data);
+  setTimeout(() => {
+    return res.status(200).json({ data });
+  },1000);
+});
+
 app.post("/auth", (req, res) => {
   const { userName, password } = req.body;
   if (!userName) {
@@ -70,14 +97,63 @@ app.post("/auth", (req, res) => {
     const user = decodeTokens.find(({ userName: name }) => name === userName);
     const pass = user?.password === password;
     if (!!user?.userName && !!pass) {
-      //Имитация задержки для наглядности
+      //задержка для имитации
       setTimeout(() => {
         return res.json({ token: user.token });
-      }, 100);
+      }, 1000);
     } else {
       return res.status(401).send({
         error: "Имя пользователя или парль не верные, проверьте данные",
       });
     }
   }
+});
+
+app.post("/fetchPostRecipe", (req, res) => {
+  const {
+    id,
+    createdUserId,
+    name,
+    description,
+    likes,
+    composition,
+    image,
+    compositionBase,
+    steps,
+    userIdLiked,
+    level,
+  } = req.body;
+  const data = {
+    id,
+    createdUserId,
+    name,
+    description,
+    likes,
+    composition,
+    image,
+    compositionBase,
+    steps,
+    userIdLiked,
+    level,
+  };
+
+  const listData = {
+    id,
+    createdUserId,
+    name,
+    description,
+    likes,
+    image,
+    compositionBase,
+    userIdLiked,
+    level,
+  };
+
+  recipes.push(data);
+  list.unshift(listData);
+  setTimeout(() => {
+    return res.status(200).json({
+      ...data,
+    });
+  }, 1000);
 });

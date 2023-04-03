@@ -12,9 +12,9 @@ export const fetchToken = createAsyncThunk(
       const response = await request(
         "http://localhost:5000/auth",
         data,
-        "post",
+        "post"
       );
-      console.log(response, 'response')
+      console.log(response, "response");
       if (response.status !== 200) {
         throw new Error(response.response.data.error);
       }
@@ -32,15 +32,17 @@ export const tokenSlice = createSlice({
   reducers: {
     saveToken: (state, action) => {
       const token = action.payload;
-      console.log(token, 'token')
+      console.log(token, "token");
       state.info = JSON.parse(window.atob(token.split(".")[1]));
       state.value = token;
-      return state;
     },
     deleteToken: (state) => {
       state.value = null;
-      return state;
+      state.info = null;
     },
+    resetError: (state) => {
+      state.error = null
+    }
   },
   extraReducers: {
     [fetchToken.pending]: (state) => {
@@ -61,7 +63,7 @@ export const tokenSlice = createSlice({
   },
 });
 
-export const { saveToken, deleteToken } = tokenSlice.actions;
+export const { saveToken, deleteToken, resetError } = tokenSlice.actions;
 
 //Selectors
 export const selectToken = (state) => state.token.value;

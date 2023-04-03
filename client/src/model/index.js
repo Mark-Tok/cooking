@@ -7,6 +7,7 @@ export {
   deleteToken,
   selectIsAuth,
   selectUserInfo,
+  resetError
 } from "./redusers/auth";
 
 export {
@@ -39,6 +40,14 @@ export {
   createDescription,
   selectNameRecipe,
   selectDescriptionRecipe,
+  selectSteps,
+  createSteps,
+  fetchPostRecipe,
+  selectStatusPostRecipe,
+  resetState,
+  selectStatusPostRecipeSuccess,
+  fetchPutRecipe,
+  selectId
 } from "./redusers/createRecipe";
 
 export { store } from "./redusers/store";

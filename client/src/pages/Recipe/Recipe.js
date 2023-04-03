@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Spin } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetcRecipe,
@@ -8,33 +8,43 @@ import {
   selectRecipe,
   selectUserInfo,
   selectRecipes,
-  removeRecipe
+  removeRecipe,
 } from "model";
+
 import { Col, Row, List, Typography } from "antd";
 import { Likes, Level } from "pages/List/ui";
 export const Recipe = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigate();
+
   const user = useSelector(selectUserInfo);
   const loading = useSelector(selectLoadingRecipe);
   const recipe = useSelector(selectRecipe);
   const recipes = useSelector(selectRecipes);
-  //   const [metaInfo, setMetaInfo] = useState(null);
   let { id } = useParams();
   const metaInfo = !!recipes
-    ? recipes.find((item) => item.id === Number(id))
+    ? recipes.find((item) => String(item.id) === String(id))
     : null;
-  //   console.log(metaInfo, 'metaInfo')
   useEffect(() => {
-    dispatch(fetcRecipe(id));
+    dispatch(fetcRecipe({ id }));
   }, [dispatch]);
 
   useEffect(() => {
-    return () => dispatch(removeRecipe())
-  }, [])
+    return () => dispatch(removeRecipe());
+  }, []);
 
+  const onEditRecipe = () => {
+    // createImage,
+    // createBase,
+    // createComposition,
+    // createName,
+    // createDescription,
+    // createSteps,
+    navigation(`/edit/${recipe?.id}`, { id: recipe?.id });
+  };
   return (
     <Spin spinning={loading}>
-      {!!recipe && !!metaInfo && (
+      {!!metaInfo && !!recipe && (
         <div
           style={{
             backgroundColor: "white",
@@ -42,8 +52,16 @@ export const Recipe = () => {
             borderRadius: "10px",
           }}
         >
+          <div style={{ textAlign: "right", marginTop: "10px" }}>
+            {String(user?.id) === String(recipe?.createdUserId) && (
+              <Button onClick={() => onEditRecipe()} type={"primary"}>
+                Редактировать{" "}
+              </Button>
+            )}
+          </div>
+
           <Typography.Title>{recipe?.name}</Typography.Title>
-          <Row>
+          <Row gutter={16}>
             <Col span={12}>
               <img style={{ maxWidth: "100%" }} src={recipe?.image} />
               <Row>
@@ -98,11 +116,11 @@ export const Recipe = () => {
                 {recipe.description}
               </Typography.Text>
             </Col>
-            {Object.keys(recipe.steps).map((_, index) => (
+            {recipe.steps.map((item, index) => (
               <Col span={24}>
                 <Typography.Title>Шаг {index + 1}</Typography.Title>
                 <Typography.Paragraph style={{ fontSize: "20px" }}>
-                  {recipe.steps[`step${index + 1}`]}
+                  {item.value}
                 </Typography.Paragraph>
               </Col>
             ))}

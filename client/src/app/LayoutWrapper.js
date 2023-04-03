@@ -1,5 +1,5 @@
 import { Layout, Space } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectIsAuth,
@@ -31,6 +31,7 @@ export const LayoutWrapper = ({ children }) => {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const token = useSelector(selectToken);
+  const navigation = useNavigate();
   const logOut = () => {
     window.localStorage.removeItem("token");
     dispatch(deleteToken());
@@ -39,11 +40,20 @@ export const LayoutWrapper = ({ children }) => {
     dispatch(fetchListRecipes());
   }, [dispatch]);
   return (
-    <Space direction="vertical" style={{ width: "100%", backgroundColor: "#b9e0bd", height:'100vh' }} size={[0, 48]}>
+    <Space
+      direction="vertical"
+      style={{ width: "100%", backgroundColor: "#b9e0bd", height: "100vh" }}
+      size={[0, 48]}
+    >
       <Layout style={{ backgroundColor: "#b9e0bd", padding: "0 150px" }}>
         <Header style={headerStyle}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img style={{ width: "20%" }} alt="logo" src={logo} />
+            <img
+              onClick={() => navigation("/")}
+              style={{ width: "20%", cursor: "pointer" }}
+              alt="logo"
+              src={logo}
+            />
           </div>
           <div>
             {isAuth ? (

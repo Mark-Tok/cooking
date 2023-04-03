@@ -27,7 +27,6 @@ export const List = () => {
   const recipes = useSelector(selectRecipes);
   const loading = useSelector(selectLoadingRecipes);
   const isLoading = loading === "loading";
-
   const columns = [
     {
       title: <div style={{ fontSize: "20px" }}>Блюдо</div>,
@@ -139,9 +138,8 @@ export const List = () => {
         flexDirection: "column",
       }}
     >
-      <Button onClick={() => navigation("/create")} type="primary">
-        Создать рецепт
-      </Button>
+      {!!user?.id && <Button onClick={() => navigation('/create')} type="primary">Создать рецепт</Button>}
+
       <div style={{ margin: "20px 0px", width: "100%" }}>
         <Input
           prefix={<SearchOutlined twoToneColor={"#b6b3b3"} />}

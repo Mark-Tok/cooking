@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectToken, saveToken, selectLoading } from "model/redusers/auth";
+import {
+  selectToken,
+  saveToken,
+  selectLoading,
+  selectStatusPostRecipeSuccess,
+} from "model";
 import { Spin } from "antd";
 const token = window.localStorage.getItem("token");
 
@@ -28,7 +33,7 @@ export const AuthWrapper = ({ children }) => {
   const loadingStatus = useSelector(selectLoading);
   const isLoading = loadingStatus === "loading";
   const pathLocation = window.location.pathname;
-
+  const recipedCreated = useSelector(selectStatusPostRecipeSuccess);
   const tokenRef = useRef(token);
 
   //redirect after registration
@@ -37,6 +42,12 @@ export const AuthWrapper = ({ children }) => {
       navigation("/list");
     }
   }, [savedToken]);
+  console.log(pathLocation, 'pathLocation')
+  useEffect(() => {
+    if (!!recipedCreated) {
+      navigation("/list");
+    }
+  }, [recipedCreated]);
 
   //save token for use in redux
   useEffect(() => {
