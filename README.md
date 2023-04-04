@@ -1,6 +1,10 @@
-### `npm install`
 
+### Установка модулей
 
+cd cliend npm i
+cd server npm i
+
+далее из корня проекта:
 ### `npm run start`
 
 
