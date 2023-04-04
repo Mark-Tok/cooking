@@ -1,10 +1,11 @@
 
 ### Установка модулей
 
-cd cliend npm i
-cd server npm i
+cd cliend => npm i
+cd server => npm i
+далее из корня проекта => npm  i
 
-далее из корня проекта:
+Звпуск проекта
 ### `npm run start`
 
 

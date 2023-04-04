@@ -6,10 +6,7 @@
   "scripts": {
     "server": "npm run dev --prefix server",
     "client": "npm run start --prefix client",
-    "serverInstall": "npm install --prefix server",
-    "clientInstall": "npm install --prefix client",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "install": "concurrently \"npm run serverInstall\" \"npm run clientInstall\""
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
   "license": "ISC",
