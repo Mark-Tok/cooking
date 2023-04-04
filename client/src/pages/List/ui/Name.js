@@ -9,7 +9,7 @@ export const Name = ({ name, image, id }) => {
         >
           {name}
         </div>
-        <img style={{ width: "50%" }} src={image} />
+        <img alt="pic" style={{ width: "50%" }} src={image} />
       </div>
     </Link>
   );

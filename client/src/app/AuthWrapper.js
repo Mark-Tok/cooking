@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, createContext } from "react";
+import React, { useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -8,7 +8,6 @@ import {
   selectStatusPostRecipeSuccess,
 } from "model";
 import { Spin } from "antd";
-const token = window.localStorage.getItem("token");
 
 const spinStyle = {
   backgroundColor: "white",
@@ -34,7 +33,6 @@ export const AuthWrapper = ({ children }) => {
   const isLoading = loadingStatus === "loading";
   const pathLocation = window.location.pathname;
   const recipedCreated = useSelector(selectStatusPostRecipeSuccess);
-  const tokenRef = useRef(token);
 
   //redirect after registration
   useEffect(() => {

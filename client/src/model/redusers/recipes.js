@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { request } from "shared/api";
-import { fetcRecipe } from "./recipe";
 //Fetch Data
 export const fetchListRecipes = createAsyncThunk(
   "api/fetchListRecipes",
   async function (data, { rejectWithValue, getState, dispatch }) {
-    const { recipes, recipe } = getState();
+    const { recipes } = getState();
     try {
       if (!!data || !!recipes.query) {
         const response = await request(

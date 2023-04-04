@@ -1,18 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button, Spin } from "antd";
+import { Button, Col, List, Row, Spin, Typography } from "antd";
+import { useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+
 import {
   fetcRecipe,
+  removeRecipe,
   selectLoadingRecipe,
   selectRecipe,
   selectUserInfo,
   selectRecipes,
-  removeRecipe,
 } from "model";
-
-import { Col, Row, List, Typography } from "antd";
 import { Likes, Level } from "pages/List/ui";
+
 export const Recipe = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
@@ -34,12 +35,6 @@ export const Recipe = () => {
   }, []);
 
   const onEditRecipe = () => {
-    // createImage,
-    // createBase,
-    // createComposition,
-    // createName,
-    // createDescription,
-    // createSteps,
     navigation(`/edit/${recipe?.id}`, { id: recipe?.id });
   };
   return (
@@ -63,7 +58,7 @@ export const Recipe = () => {
           <Typography.Title>{recipe?.name}</Typography.Title>
           <Row gutter={16}>
             <Col span={12}>
-              <img style={{ maxWidth: "100%" }} src={recipe?.image} />
+              <img alt="pic" style={{ maxWidth: "100%" }} src={recipe?.image} />
               <Row>
                 <Col
                   style={{

@@ -3,7 +3,7 @@ import TextArea from "antd/es/input/TextArea";
 import { selectSteps, createSteps } from "model";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 export const Recipe = () => {
   const steps = useSelector(selectSteps);
@@ -21,7 +21,7 @@ export const Recipe = () => {
     });
     dispatch(createSteps(newValuesStep));
   };
-  console.log(steps, "steps");
+  
   return (
     <div>
       {steps.map(({ value, id }, index) => {

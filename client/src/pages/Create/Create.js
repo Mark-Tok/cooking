@@ -111,7 +111,6 @@ export const Create = ({ mode }) => {
     data.steps = recipe.filter((item) => !!item.value);
 
     data.userIdLiked = [];
-    // dispatch()
     if (mode !== "edit") {
       dispatch(fetchPostRecipe(data));
     } else {

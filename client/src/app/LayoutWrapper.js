@@ -1,15 +1,14 @@
 import { Layout, Space } from "antd";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectIsAuth,
   deleteToken,
   fetchListRecipes,
-  selectToken,
 } from "model";
 import logo from "../assets/logo.png";
 import { useEffect } from "react";
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const headerStyle = {
   textAlign: "center",
@@ -30,7 +29,6 @@ const headerStyle = {
 export const LayoutWrapper = ({ children }) => {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
-  const token = useSelector(selectToken);
   const navigation = useNavigate();
   const logOut = () => {
     window.localStorage.removeItem("token");
