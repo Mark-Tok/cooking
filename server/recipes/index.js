@@ -111,7 +111,7 @@ const recipes = [
   {
     id: 43243242,
     image: `${host}/images/eggs.jpeg`,
-    createdUserId: null,
+    createdUserId: '121212',
     name: "Яищница",
     description: "",
     composition: [
@@ -162,7 +162,7 @@ const recipes = [
   {
     id: 7457845,
     image: `${host}/images/plov.jpeg`,
-    createdUserId: null,
+    createdUserId: '939393',
     name: "Плов",
     description: "",
     composition: [
