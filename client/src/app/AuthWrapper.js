@@ -40,6 +40,7 @@ export const AuthWrapper = ({ children }) => {
       navigation("/list");
     }
   }, [savedToken]);
+  
   console.log(pathLocation, 'pathLocation')
   useEffect(() => {
     if (!!recipedCreated) {

@@ -1,5 +1,4 @@
 import {
-  configureStore,
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
