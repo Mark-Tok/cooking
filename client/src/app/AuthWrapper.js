@@ -17,11 +17,7 @@ const spinStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  // zIndex:100
 };
-//жопа в том что когда мы удаляем токен, в контексте он остаётся и
-// роутеры не срабатывают так как надо
-export const AuthContext = createContext({});
 
 export const AuthWrapper = ({ children }) => {
   const navigation = useNavigate();
